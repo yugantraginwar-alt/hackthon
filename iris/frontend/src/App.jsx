@@ -23,12 +23,14 @@ import {
 
 import { 
   AlertCircle,
-  Zap
+  Zap,
+  ArrowLeft
 } from 'lucide-react';
 
 export default function App() {
   const [activeView, setActiveView] = useState('scanners'); // 'scanners', 'demo'
   const [activeModality, setActiveModality] = useState('url'); // default to URL
+  const [mobileInspectionOpen, setMobileInspectionOpen] = useState(false); // mobile drill-down state
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
@@ -39,9 +41,19 @@ export default function App() {
     scannerSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleSelectModality = (modalityId) => {
+    setActiveModality(modalityId);
+    setMobileInspectionOpen(true);
+  };
+
+  const handleBackToOptions = () => {
+    setMobileInspectionOpen(false);
+  };
+
   const handleSelectPrimaryAction = (modality) => {
     setActiveModality(modality);
     setActiveView('scanners');
+    setMobileInspectionOpen(true);
     setCurrentResult(null);
     scrollToScanner();
   };
@@ -131,6 +143,7 @@ export default function App() {
   const handleRunDemoScenario = async (scenario) => {
     setErrorMsg('');
     setActiveView('scanners');
+    setMobileInspectionOpen(true);
 
     if (scenario.type === 'message') {
       setActiveModality('message');
@@ -332,7 +345,10 @@ export default function App() {
             {currentResult ? (
               <ResultView
                 result={currentResult}
-                onReset={() => setCurrentResult(null)}
+                onReset={() => {
+                  setCurrentResult(null);
+                  setMobileInspectionOpen(false);
+                }}
               />
             ) : (
               <div className="animate-fade-in">
@@ -341,10 +357,14 @@ export default function App() {
 
                 {/* Main Threat Inspection Workbench Section */}
                 <div ref={scannerSectionRef} style={{ paddingTop: '28px', marginBottom: '40px' }}>
-                  <div style={{
-                    marginBottom: '24px',
-                    textAlign: 'center'
-                  }}>
+                  {/* Workbench Header: Hidden on mobile when inspection panel is open */}
+                  <div
+                    className={`workbench-header ${mobileInspectionOpen ? 'mobile-hidden' : ''}`}
+                    style={{
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}
+                  >
                     <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.02em', marginBottom: '4px' }}>
                       Threat Inspection Workbench
                     </h2>
@@ -353,14 +373,31 @@ export default function App() {
                     </p>
                   </div>
 
-                  {/* 5 Modality Workbench CTA Cards (3 + 2 Centered Layout) */}
-                  <ModalityTabs
-                    activeModality={activeModality}
-                    setActiveModality={setActiveModality}
-                  />
+                  {/* 5 Modality Workbench CTA Cards: Hidden on mobile when inspection panel is open */}
+                  <div className={`workbench-cards-wrapper ${mobileInspectionOpen ? 'mobile-hidden' : ''}`}>
+                    <ModalityTabs
+                      activeModality={activeModality}
+                      setActiveModality={handleSelectModality}
+                    />
+                  </div>
 
-                  {/* Active Modality Input Panel */}
-                  <div className="surface-elevated" style={{ padding: '28px 32px' }}>
+                  {/* Active Modality Input Panel: Hidden on mobile when mobileInspectionOpen is false */}
+                  <div
+                    className={`surface-elevated workbench-panel-wrapper ${!mobileInspectionOpen ? 'mobile-hidden' : ''} animate-fade-in`}
+                    style={{ padding: '28px 32px' }}
+                  >
+                    {/* Mobile Back Button */}
+                    <div className="mobile-back-button-container">
+                      <button
+                        type="button"
+                        onClick={handleBackToOptions}
+                        className="mobile-back-button"
+                      >
+                        <ArrowLeft size={16} />
+                        <span>Back to inspection options</span>
+                      </button>
+                    </div>
+
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                       <div style={{
                         width: '32px',
@@ -461,5 +498,6 @@ export default function App() {
     </div>
   );
 }
+
 
 
