@@ -65,11 +65,13 @@ export default function App() {
     try {
       const [data] = await Promise.all([
         analyzeMessage(text),
-        new Promise((resolve) => setTimeout(resolve, 1500))
+        new Promise((resolve) => setTimeout(resolve, 800))
       ]);
       setCurrentResult(data);
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to analyze message');
+      console.error('Message inspection error:', err);
+      setErrorMsg(err.message || 'Inspection failed. Please try again.');
+      setCurrentResult(null);
     } finally {
       setIsProcessing(false);
     }
@@ -81,11 +83,13 @@ export default function App() {
     try {
       const [data] = await Promise.all([
         analyzeURL(url),
-        new Promise((resolve) => setTimeout(resolve, 1500))
+        new Promise((resolve) => setTimeout(resolve, 800))
       ]);
       setCurrentResult(data);
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to analyze URL');
+      console.error('URL inspection error:', err);
+      setErrorMsg(err.message || 'Inspection failed. Please try again.');
+      setCurrentResult(null);
     } finally {
       setIsProcessing(false);
     }
@@ -97,11 +101,13 @@ export default function App() {
     try {
       const [data] = await Promise.all([
         analyzeQR(file, contextClaim),
-        new Promise((resolve) => setTimeout(resolve, 1600))
+        new Promise((resolve) => setTimeout(resolve, 800))
       ]);
       setCurrentResult(data);
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to decode QR code');
+      console.error('QR inspection error:', err);
+      setErrorMsg(err.message || 'Inspection failed. Please try again.');
+      setCurrentResult(null);
     } finally {
       setIsProcessing(false);
     }
@@ -113,11 +119,13 @@ export default function App() {
     try {
       const [data] = await Promise.all([
         analyzeScreenshot(file),
-        new Promise((resolve) => setTimeout(resolve, 1700))
+        new Promise((resolve) => setTimeout(resolve, 800))
       ]);
       setCurrentResult(data);
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to analyze screenshot');
+      console.error('Screenshot inspection error:', err);
+      setErrorMsg(err.message || 'Inspection failed. Please try again.');
+      setCurrentResult(null);
     } finally {
       setIsProcessing(false);
     }
@@ -129,15 +137,18 @@ export default function App() {
     try {
       const [data] = await Promise.all([
         analyzeTransaction(txData),
-        new Promise((resolve) => setTimeout(resolve, 1500))
+        new Promise((resolve) => setTimeout(resolve, 800))
       ]);
       setCurrentResult(data);
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to analyze transaction');
+      console.error('Transaction inspection error:', err);
+      setErrorMsg(err.message || 'Inspection failed. Please try again.');
+      setCurrentResult(null);
     } finally {
       setIsProcessing(false);
     }
   };
+
 
   // 1-Click Demo Launcher
   const handleRunDemoScenario = async (scenario) => {
