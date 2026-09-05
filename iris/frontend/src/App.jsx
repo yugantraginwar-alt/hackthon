@@ -50,6 +50,13 @@ export default function App() {
     setIsInspectionOpen(false);
   };
 
+  const handleBackToMain = () => {
+    setActiveView('scanners');
+    setIsInspectionOpen(false);
+    setCurrentResult(null);
+    setErrorMsg('');
+  };
+
   const handleSelectPrimaryAction = (modality) => {
     setActiveModality(modality);
     setActiveView('scanners');
@@ -502,7 +509,10 @@ export default function App() {
 
         {/* View 2: DEMO FOR ACET Interactive Scenarios */}
         {activeView === 'demo' && (
-          <DemoScenarios onRunScenario={handleRunDemoScenario} />
+          <DemoScenarios
+            onRunScenario={handleRunDemoScenario}
+            onBackToMain={handleBackToMain}
+          />
         )}
       </main>
 

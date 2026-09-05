@@ -7,7 +7,8 @@ import {
   Image as ImageIcon, 
   CheckCircle2, 
   CreditCard,
-  Zap
+  Zap,
+  ArrowLeft
 } from 'lucide-react';
 
 const SCENARIOS = [
@@ -91,9 +92,23 @@ const SCENARIOS = [
   }
 ];
 
-export default function DemoScenarios({ onRunScenario }) {
+export default function DemoScenarios({ onRunScenario, onBackToMain }) {
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '36px' }}>
+      {/* Back to Main Page Button */}
+      {onBackToMain && (
+        <div style={{ marginBottom: '20px' }}>
+          <button
+            type="button"
+            onClick={onBackToMain}
+            className="workbench-back-button"
+          >
+            <ArrowLeft size={16} />
+            <span>Back to Main Page</span>
+          </button>
+        </div>
+      )}
+
       <div style={{ marginBottom: '24px', textAlign: 'center' }}>
         <div style={{
           display: 'inline-flex',
