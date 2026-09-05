@@ -1,0 +1,151 @@
+rules:
+  # KYC & Account Suspension
+  - id: R001
+    signal: KYC_URGENCY_COMBO
+    severity: 30
+    confidence: 0.95
+    category: FAKE_KYC
+    description: "Combines KYC update claim with imminent account block or suspension"
+    match_all_groups:
+      - ["kyc", "pan", "aadhaar", "document verification", "update kyc"]
+      - ["blocked", "suspended", "expire", "deactivated", "restricted", "hold"]
+
+  - id: R002
+    signal: KYC_CLAIM
+    severity: 20
+    confidence: 0.90
+    category: FAKE_KYC
+    description: "Claims urgent KYC verification is required"
+    keywords: ["kyc", "pan card linked", "aadhaar verification", "update kyc", "kyc pending"]
+
+  # Credential Theft
+  - id: R003
+    signal: OTP_PIN_REQUEST
+    severity: 45
+    confidence: 0.98
+    category: OTP_SCAM
+    description: "Demands OTP, PIN, password, or security credentials"
+    keywords: ["otp", "upi pin", "mpin", "security pin", "cvv", "password", "share code", "enter pin"]
+
+  # Urgency & Social Engineering
+  - id: R004
+    signal: URGENCY_LANGUAGE
+    severity: 20
+    confidence: 0.88
+    category: PHISHING
+    description: "Pressures user with strict deadlines or immediate threat"
+    keywords: ["immediately", "within 24 hours", "today itself", "urgently", "action required immediately", "account will be closed", "last warning", "expire today", "blocked immediately"]
+
+  - id: R005
+    signal: AUTHORITY_IMPERSONATION
+    severity: 25
+    confidence: 0.92
+    category: IMPERSONATION
+    description: "Impersonates bank, regulatory body, police, or tax department"
+    keywords: ["reserve bank of india", "rbi", "income tax department", "police department", "cyber cell", "sbi customer care", "hdfc security", "icici fraud desk", "customs officer", "cbi department"]
+
+  # Lottery / Reward / Cashback Lure
+  - id: R006
+    signal: REWARD_LURE
+    severity: 25
+    confidence: 0.90
+    category: REFUND_SCAM
+    description: "Claims fake cash prize, cashback, or lottery winnings"
+    keywords: ["congratulations you won", "cashback reward", "lottery prize", "claim reward", "credited to your account", "win ₹", "won rs", "lucky winner", "claim your prize"]
+
+  # Refund & Payment Claims
+  - id: R007
+    signal: PAYMENT_REQUEST_TEXT
+    severity: 25
+    confidence: 0.85
+    category: PAYMENT_REQUEST
+    description: "Demands direct UPI transfer or payment release fee"
+    keywords: ["pay rs", "send ₹", "transfer amount", "processing fee", "refundable deposit", "pay to claim", "paytm payment request"]
+
+  - id: R008
+    signal: FAKE_SUPPORT
+    severity: 20
+    confidence: 0.85
+    category: FAKE_SUPPORT
+    description: "Offers unauthorized customer care or helpline"
+    keywords: ["customer care helpline", "support executive", "toll free support", "connect to executive", "whatsapp support desk", "helpline number"]
+
+  # QR Intent Mismatch (Evaluated in QR scanner)
+  - id: R014
+    signal: CLAIM_INTENT_MISMATCH
+    severity: 35
+    confidence: 0.95
+    category: QR_SCAM
+    description: "QR initiates outgoing payment despite claim of incoming refund/money"
+
+  - id: R015
+    signal: QR_INITIATES_PAYMENT
+    severity: 15
+    confidence: 0.90
+    category: QR_SCAM
+    description: "QR payload prompts for money transfer"
+
+  - id: R016
+    signal: UNVERIFIED_RECIPIENT
+    severity: 15
+    confidence: 0.80
+    category: QR_SCAM
+    description: "Recipient VPA is not an authenticated official merchant"
+
+  # URL Security
+  - id: R020
+    signal: TYPOSQUATTED_DOMAIN
+    severity: 35
+    confidence: 0.95
+    category: PHISHING
+    description: "Domain closely mimics legitimate bank or payment brand"
+
+  - id: R021
+    signal: IP_HOST_URL
+    severity: 25
+    confidence: 0.90
+    category: PHISHING
+    description: "URL uses raw IP address instead of domain name"
+
+  - id: R022
+    signal: SENSITIVE_KEYWORD_IN_PATH
+    severity: 20
+    confidence: 0.85
+    category: PHISHING
+    description: "URL path contains sensitive auth keywords"
+
+  # Transaction Anomalies
+  - id: R030
+    signal: AMOUNT_ANOMALY
+    severity: 25
+    confidence: 0.85
+    category: OTHER
+    description: "Transaction amount exceeds 5x user's historical average"
+
+  - id: R031
+    signal: NEW_RECIPIENT
+    severity: 20
+    confidence: 0.80
+    category: OTHER
+    description: "First-time transfer to an unverified recipient VPA"
+
+  - id: R032
+    signal: UNUSUAL_TIME
+    severity: 15
+    confidence: 0.75
+    category: OTHER
+    description: "Transaction attempted between 00:00 and 05:00 hours"
+
+  - id: R033
+    signal: DEVICE_CHANGE
+    severity: 20
+    confidence: 0.85
+    category: OTHER
+    description: "Payment initiated from an unrecognized device hardware ID"
+
+  - id: R034
+    signal: LOCATION_CHANGE
+    severity: 15
+    confidence: 0.75
+    category: OTHER
+    description: "Transaction coordinates differ significantly from user's primary cluster"

@@ -1,0 +1,19 @@
+{
+  "model_version": "v0.1-demo",
+  "algorithm": "TF-IDF + Logistic Regression",
+  "classes": [
+    "FAKE_KYC",
+    "FAKE_SUPPORT",
+    "IMPERSONATION",
+    "OTHER",
+    "OTP_SCAM",
+    "PAYMENT_REQUEST",
+    "PHISHING",
+    "QR_SCAM",
+    "REFUND_SCAM",
+    "SAFE"
+  ],
+  "sample_count": 55,
+  "trained_at": "2026-09-04T18:20:28.423962",
+  "disclosure": "Trained on curated and synthetic Indian UPI fraud scenarios for demo and hackathon prototype purposes. Not validated against live NPCI production data."
+}
