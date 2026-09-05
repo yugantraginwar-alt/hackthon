@@ -108,13 +108,13 @@ export default function DemoScenarios({ onRunScenario }) {
           fontWeight: '600',
           marginBottom: '8px'
         }}>
-          <Zap size={13} /> Official PS-03 Golden Test Suite
+          <Zap size={13} /> DEMO FOR ACET Test Suite
         </div>
         <h2 style={{ fontSize: '1.65rem', fontWeight: '800', color: '#ffffff', marginBottom: '4px' }}>
           Interactive Judge Scenarios
         </h2>
         <p style={{ color: 'var(--text-secondary)', maxWidth: '560px', margin: '0 auto', fontSize: '0.86rem' }}>
-          Pre-configured vectors covering all 6 validation scenarios from Section 32 of the PRD.
+          Pre-configured vectors covering all validation scenarios for real-time risk classification.
         </p>
       </div>
 

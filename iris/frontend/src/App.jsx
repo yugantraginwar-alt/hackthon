@@ -2,13 +2,9 @@ import React, { useState, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ModalityTabs, { MODALITIES } from './components/ModalityTabs';
-import ProductPrinciples from './components/ProductPrinciples';
 import ProcessingModal from './components/ProcessingModal';
 import ResultView from './components/ResultView';
 import DemoScenarios from './components/DemoScenarios';
-import DashboardStats from './components/DashboardStats';
-import HistoryTab from './components/HistoryTab';
-import Footer from './components/Footer';
 
 // Scanners
 import MessageScannerTab from './components/scanners/MessageScannerTab';
@@ -22,8 +18,7 @@ import {
   analyzeURL, 
   analyzeQR, 
   analyzeScreenshot, 
-  analyzeTransaction,
-  getAnalysisDetail
+  analyzeTransaction
 } from './lib/api';
 
 import { 
@@ -32,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  const [activeView, setActiveView] = useState('scanners'); // 'scanners', 'demo', 'dashboard', 'history'
+  const [activeView, setActiveView] = useState('scanners'); // 'scanners', 'demo'
   const [activeModality, setActiveModality] = useState('url'); // default to URL
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
@@ -296,19 +291,6 @@ export default function App() {
     }
   };
 
-  const handleViewHistoricalRecord = async (analysisId) => {
-    try {
-      setIsProcessing(true);
-      const data = await getAnalysisDetail(analysisId);
-      setCurrentResult(data);
-      setActiveView('scanners');
-    } catch (err) {
-      setErrorMsg('Could not load analysis details');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
   const currentModalityObj = MODALITIES.find(m => m.id === activeModality);
 
   return (
@@ -354,33 +336,24 @@ export default function App() {
               />
             ) : (
               <div className="animate-fade-in">
-                {/* Hero Introduction with Scroll Cue */}
-                <Hero
-                  onSelectPrimaryAction={handleSelectPrimaryAction}
-                  onScrollToScanner={scrollToScanner}
-                />
+                {/* Hero Header */}
+                <Hero />
 
-                {/* Main Threat Scanner Section */}
+                {/* Main Threat Inspection Workbench Section */}
                 <div ref={scannerSectionRef} style={{ paddingTop: '20px', marginBottom: '32px' }}>
                   <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '14px',
-                    flexWrap: 'wrap',
-                    gap: '6px'
+                    marginBottom: '16px',
+                    textAlign: 'left'
                   }}>
-                    <div>
-                      <h2 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.02em' }}>
-                        Threat Inspection Workbench
-                      </h2>
-                      <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                        Select an input modality to begin explainable security evaluation
-                      </p>
-                    </div>
+                    <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.02em', marginBottom: '3px' }}>
+                      Threat Inspection Workbench
+                    </h2>
+                    <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                      Select an input modality to begin security evaluation.
+                    </p>
                   </div>
 
-                  {/* 5 Modality Switchers */}
+                  {/* 5 Modality Workbench CTA Cards */}
                   <ModalityTabs
                     activeModality={activeModality}
                     setActiveModality={setActiveModality}
@@ -429,12 +402,9 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Supporting Architecture: Detect -> Explain -> Protect */}
-                <ProductPrinciples />
-
-                {/* Fast Link to Golden Test Demos */}
+                {/* DEMO FOR ACET Quick Launcher */}
                 <div className="surface-card" style={{
-                  padding: '16px 20px',
+                  padding: '18px 22px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -443,34 +413,35 @@ export default function App() {
                   background: 'var(--bg-surface-1)',
                   border: '1px solid var(--border-default)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '6px',
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '8px',
                       background: 'var(--bg-surface-2)',
+                      border: '1px solid var(--border-default)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: 'var(--text-primary)'
+                      color: 'var(--accent-light)'
                     }}>
-                      <Zap size={16} />
+                      <Zap size={18} />
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '0.92rem', fontWeight: '700', color: '#ffffff' }}>
-                        Demonstrating for Hackathon Evaluation?
+                      <h4 style={{ fontSize: '0.94rem', fontWeight: '700', color: '#ffffff' }}>
+                        Demonstrating for ACET Evaluation?
                       </h4>
                       <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                        Execute all 6 predefined threat scenarios with 1-click verification of all detection algorithms.
+                        Execute predefined threat scenarios with 1-click verification of all detection algorithms.
                       </p>
                     </div>
                   </div>
                   <button
                     className="btn btn-primary"
                     onClick={() => setActiveView('demo')}
-                    style={{ padding: '7px 14px', fontSize: '0.8rem' }}
+                    style={{ padding: '8px 16px', fontSize: '0.84rem', fontWeight: '700' }}
                   >
-                    Open Golden Demos
+                    DEMO FOR ACET
                   </button>
                 </div>
               </div>
@@ -478,27 +449,15 @@ export default function App() {
           </>
         )}
 
-        {/* View 2: 1-Click Golden Demo Scenarios */}
+        {/* View 2: DEMO FOR ACET Interactive Scenarios */}
         {activeView === 'demo' && (
           <DemoScenarios onRunScenario={handleRunDemoScenario} />
-        )}
-
-        {/* View 3: Security Intelligence Dashboard */}
-        {activeView === 'dashboard' && (
-          <DashboardStats onViewRecord={handleViewHistoricalRecord} />
-        )}
-
-        {/* View 4: Audit History */}
-        {activeView === 'history' && (
-          <HistoryTab onSelectAnalysis={handleViewHistoricalRecord} />
         )}
       </main>
 
       {/* Processing Modal */}
       <ProcessingModal active={isProcessing} />
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
+

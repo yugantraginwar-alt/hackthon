@@ -1,28 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Shield, PhoneCall, Zap, BarChart2, History, Menu, X } from 'lucide-react';
-import { checkHealth } from '../lib/api';
+import React, { useState } from 'react';
+import { Shield, Zap, Menu, X } from 'lucide-react';
 
 export default function Navbar({ activeView, setActiveView }) {
-  const [online, setOnline] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    const ping = async () => {
-      try {
-        await checkHealth();
-        if (mounted) setOnline(true);
-      } catch (e) {
-        if (mounted) setOnline(false);
-      }
-    };
-    ping();
-    const interval = setInterval(ping, 12000);
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, []);
 
   const handleNav = (view) => {
     setActiveView(view);
@@ -30,12 +10,18 @@ export default function Navbar({ activeView, setActiveView }) {
   };
 
   return (
-    <header className="nav-header">
+    <header className="nav-header" style={{
+      background: 'var(--bg-surface-1)',
+      borderBottom: '1px solid var(--border-default)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 100
+    }}>
       <div className="container" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '62px'
+        height: '64px'
       }}>
         {/* Brand */}
         <div
@@ -46,9 +32,9 @@ export default function Navbar({ activeView, setActiveView }) {
           onKeyDown={(e) => e.key === 'Enter' && handleNav('scanners')}
         >
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '6px',
+            width: '34px',
+            height: '34px',
+            borderRadius: '8px',
             background: 'var(--bg-surface-2)',
             border: '1px solid var(--border-default)',
             display: 'flex',
@@ -56,105 +42,78 @@ export default function Navbar({ activeView, setActiveView }) {
             justifyContent: 'center',
             color: 'var(--accent-light)'
           }}>
-            <Shield size={18} strokeWidth={2.2} />
+            <Shield size={19} strokeWidth={2.2} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{
-                fontSize: '1.15rem',
+                fontSize: '1.2rem',
                 fontWeight: '800',
                 letterSpacing: '-0.02em',
                 color: '#ffffff'
               }}>
                 IRIS
               </span>
-              <span className="mono" style={{
-                fontSize: '0.62rem',
-                fontWeight: '600',
-                padding: '1px 5px',
-                borderRadius: '3px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: 'var(--text-secondary)',
-                border: '1px solid var(--border-subtle)'
-              }}>
-                PS-03
-              </span>
             </div>
-            <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: '500', lineHeight: 1 }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '500', lineHeight: 1 }}>
               Intelligent Risk & Impersonation Shield
             </div>
           </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav style={{ display: 'none', alignItems: 'center', gap: '4px' }} className="desktop-nav">
+        {/* Center Navigation */}
+        <nav style={{ display: 'none', alignItems: 'center', gap: '8px' }} className="desktop-nav">
           <button
             className={`nav-link ${activeView === 'scanners' ? 'active' : ''}`}
             onClick={() => handleNav('scanners')}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '6px',
+              fontSize: '0.84rem',
+              fontWeight: '600',
+              color: activeView === 'scanners' ? '#ffffff' : 'var(--text-secondary)',
+              background: activeView === 'scanners' ? 'var(--bg-surface-2)' : 'transparent',
+              border: activeView === 'scanners' ? '1px solid var(--border-default)' : '1px solid transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.15s ease'
+            }}
           >
             <Shield size={14} /> Threat Scanner
           </button>
           <button
             className={`nav-link ${activeView === 'demo' ? 'active' : ''}`}
             onClick={() => handleNav('demo')}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '6px',
+              fontSize: '0.84rem',
+              fontWeight: '600',
+              color: activeView === 'demo' ? '#ffffff' : 'var(--text-secondary)',
+              background: activeView === 'demo' ? 'var(--bg-surface-2)' : 'transparent',
+              border: activeView === 'demo' ? '1px solid var(--border-default)' : '1px solid transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.15s ease'
+            }}
           >
-            <Zap size={14} /> Golden Demos
-          </button>
-          <button
-            className={`nav-link ${activeView === 'dashboard' ? 'active' : ''}`}
-            onClick={() => handleNav('dashboard')}
-          >
-            <BarChart2 size={14} /> Intelligence
-          </button>
-          <button
-            className={`nav-link ${activeView === 'history' ? 'active' : ''}`}
-            onClick={() => handleNav('history')}
-          >
-            <History size={14} /> Audit History
+            <Zap size={14} /> DEMO FOR ACET
           </button>
         </nav>
 
-        {/* Right Status / Helpline */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Health Dot */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '0.72rem',
-            padding: '3px 8px',
-            borderRadius: '20px',
-            background: online ? 'var(--risk-safe-bg)' : 'var(--risk-danger-bg)',
-            border: `1px solid ${online ? 'var(--risk-safe-border)' : 'var(--risk-danger-border)'}`,
-            color: online ? 'var(--risk-safe)' : 'var(--risk-danger)'
-          }}>
-            <span style={{
-              width: '5px',
-              height: '5px',
-              borderRadius: '50%',
-              background: online ? 'var(--risk-safe)' : 'var(--risk-danger)'
-            }} />
-            <span style={{ fontWeight: '600' }}>{online ? 'Active' : 'Offline'}</span>
-          </div>
-
-          <a
-            href="tel:1930"
-            className="btn btn-secondary"
-            style={{ padding: '5px 10px', fontSize: '0.75rem', gap: '5px' }}
-            title="National Cyber Crime Reporting Helpline"
-          >
-            <PhoneCall size={12} color="var(--text-secondary)" />
-            <span>Helpline: <strong>1930</strong></span>
-          </a>
-
-          {/* Mobile hamburger */}
+        {/* Right - Mobile Hamburger */}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <button
             className="btn btn-ghost mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{ padding: '6px' }}
+            style={{ padding: '6px', color: 'var(--text-primary)' }}
             aria-label="Toggle Navigation"
           >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
@@ -164,44 +123,58 @@ export default function Navbar({ activeView, setActiveView }) {
         <div style={{
           background: 'var(--bg-surface-1)',
           borderBottom: '1px solid var(--border-default)',
-          padding: '10px 16px',
+          padding: '12px 16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '6px'
+          gap: '8px'
         }}>
           <button
             className={`nav-link ${activeView === 'scanners' ? 'active' : ''}`}
             onClick={() => handleNav('scanners')}
-            style={{ width: '100%', justifyContent: 'flex-start' }}
+            style={{
+              width: '100%',
+              justify: 'flex-start',
+              padding: '10px 12px',
+              borderRadius: '6px',
+              fontSize: '0.86rem',
+              fontWeight: '600',
+              color: activeView === 'scanners' ? '#ffffff' : 'var(--text-secondary)',
+              background: activeView === 'scanners' ? 'var(--bg-surface-2)' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
           >
-            <Shield size={15} /> Threat Scanner
+            <Shield size={16} /> Threat Scanner
           </button>
           <button
             className={`nav-link ${activeView === 'demo' ? 'active' : ''}`}
             onClick={() => handleNav('demo')}
-            style={{ width: '100%', justifyContent: 'flex-start' }}
+            style={{
+              width: '100%',
+              justify: 'flex-start',
+              padding: '10px 12px',
+              borderRadius: '6px',
+              fontSize: '0.86rem',
+              fontWeight: '600',
+              color: activeView === 'demo' ? '#ffffff' : 'var(--text-secondary)',
+              background: activeView === 'demo' ? 'var(--bg-surface-2)' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
           >
-            <Zap size={15} /> Golden Demos
-          </button>
-          <button
-            className={`nav-link ${activeView === 'dashboard' ? 'active' : ''}`}
-            onClick={() => handleNav('dashboard')}
-            style={{ width: '100%', justifyContent: 'flex-start' }}
-          >
-            <BarChart2 size={15} /> Intelligence
-          </button>
-          <button
-            className={`nav-link ${activeView === 'history' ? 'active' : ''}`}
-            onClick={() => handleNav('history')}
-            style={{ width: '100%', justifyContent: 'flex-start' }}
-          >
-            <History size={15} /> Audit History
+            <Zap size={16} /> DEMO FOR ACET
           </button>
         </div>
       )}
 
       <style>{`
-        @media (min-width: 860px) {
+        @media (min-width: 768px) {
           .desktop-nav { display: flex !important; }
           .mobile-menu-btn { display: none !important; }
         }
@@ -209,3 +182,4 @@ export default function Navbar({ activeView, setActiveView }) {
     </header>
   );
 }
+
