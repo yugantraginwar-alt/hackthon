@@ -297,23 +297,23 @@ export default function App() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar activeView={activeView} setActiveView={setActiveView} />
 
-      <main className="container" style={{ flex: 1, paddingTop: '12px', paddingBottom: '48px' }}>
+      <main className="container" style={{ flex: 1, paddingTop: '16px', paddingBottom: '64px' }}>
         {/* Error Notification Banner */}
         {errorMsg && (
           <div style={{
-            padding: '10px 16px',
+            padding: '12px 18px',
             borderRadius: 'var(--radius-md)',
             background: 'var(--risk-danger-bg)',
             border: '1px solid var(--risk-danger-border)',
             color: 'var(--risk-danger)',
-            marginBottom: '18px',
+            marginBottom: '24px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            fontSize: '0.84rem'
+            fontSize: '0.86rem'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-              <AlertCircle size={15} color="var(--risk-danger)" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <AlertCircle size={16} color="var(--risk-danger)" />
               <span>{errorMsg}</span>
             </div>
             <button
@@ -340,45 +340,46 @@ export default function App() {
                 <Hero />
 
                 {/* Main Threat Inspection Workbench Section */}
-                <div ref={scannerSectionRef} style={{ paddingTop: '20px', marginBottom: '32px' }}>
+                <div ref={scannerSectionRef} style={{ paddingTop: '28px', marginBottom: '40px' }}>
                   <div style={{
-                    marginBottom: '16px',
-                    textAlign: 'left'
+                    marginBottom: '24px',
+                    textAlign: 'center'
                   }}>
-                    <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.02em', marginBottom: '3px' }}>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.02em', marginBottom: '4px' }}>
                       Threat Inspection Workbench
                     </h2>
-                    <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
                       Select an input modality to begin security evaluation.
                     </p>
                   </div>
 
-                  {/* 5 Modality Workbench CTA Cards */}
+                  {/* 5 Modality Workbench CTA Cards (3 + 2 Centered Layout) */}
                   <ModalityTabs
                     activeModality={activeModality}
                     setActiveModality={setActiveModality}
                   />
 
                   {/* Active Modality Input Panel */}
-                  <div className="surface-elevated" style={{ padding: '24px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
+                  <div className="surface-elevated" style={{ padding: '28px 32px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                       <div style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '6px',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '8px',
                         background: 'var(--bg-surface-2)',
+                        border: '1px solid var(--border-default)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: 'var(--text-primary)'
+                        color: 'var(--accent-light)'
                       }}>
-                        {currentModalityObj && <currentModalityObj.icon size={15} />}
+                        {currentModalityObj && <currentModalityObj.icon size={16} />}
                       </div>
                       <div>
-                        <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#ffffff' }}>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.01em' }}>
                           {currentModalityObj?.name} Inspection
                         </h3>
-                        <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                        <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           {currentModalityObj?.desc}
                         </p>
                       </div>
@@ -404,12 +405,12 @@ export default function App() {
 
                 {/* DEMO FOR ACET Quick Launcher */}
                 <div className="surface-card" style={{
-                  padding: '18px 22px',
+                  padding: '20px 24px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   flexWrap: 'wrap',
-                  gap: '12px',
+                  gap: '14px',
                   background: 'var(--bg-surface-1)',
                   border: '1px solid var(--border-default)'
                 }}>
@@ -428,7 +429,7 @@ export default function App() {
                       <Zap size={18} />
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '0.94rem', fontWeight: '700', color: '#ffffff' }}>
+                      <h4 style={{ fontSize: '0.96rem', fontWeight: '800', color: '#ffffff' }}>
                         Demonstrating for ACET Evaluation?
                       </h4>
                       <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
@@ -439,7 +440,7 @@ export default function App() {
                   <button
                     className="btn btn-primary"
                     onClick={() => setActiveView('demo')}
-                    style={{ padding: '8px 16px', fontSize: '0.84rem', fontWeight: '700' }}
+                    style={{ padding: '9px 18px', fontSize: '0.84rem', fontWeight: '700' }}
                   >
                     DEMO FOR ACET
                   </button>
@@ -460,4 +461,5 @@ export default function App() {
     </div>
   );
 }
+
 

@@ -52,7 +52,7 @@
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Layout Spacing */
-  --container-max: 1140px;
+  --container-max: 1200px;
   --radius-sm: 5px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -89,8 +89,11 @@ body {
 
 .container {
   max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 24px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  width: 100%;
 }
 
 /* Surfaces */
@@ -290,8 +293,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--bg-app);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface-1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .nav-link {
@@ -354,10 +357,12 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
   .container {
-    padding: 0 16px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .hero-title {
-    font-size: 3rem !important;
+    font-size: 3.2rem !important;
   }
 }
+
 
