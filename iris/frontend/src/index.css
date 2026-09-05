@@ -354,10 +354,35 @@ body {
   color: #ffffff !important;
 }
 
-/* Mobile Drill-Down & Back Button */
+/* Workbench Back Button (Desktop & Mobile) */
+.workbench-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: auto;
+}
+
+.workbench-back-button:hover,
+.workbench-back-button:active {
+  background: var(--bg-surface-3);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* Legacy Mobile CSS compatibility */
 .mobile-back-button-container {
-  display: none;
-  margin-bottom: 20px;
+  display: block;
+  margin-bottom: 16px;
 }
 
 .mobile-back-button {
@@ -368,10 +393,10 @@ body {
   border-radius: var(--radius-md);
   background: var(--bg-surface-2);
   border: 1px solid var(--border-default);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-family: var(--font-sans);
-  font-size: 0.84rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
   width: auto;
@@ -381,7 +406,7 @@ body {
 .mobile-back-button:active {
   background: var(--bg-surface-3);
   border-color: var(--border-strong);
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* Responsive */
@@ -394,18 +419,11 @@ body {
     font-size: 3.2rem !important;
   }
 
-  .mobile-back-button-container {
-    display: block;
-  }
-
-  .mobile-hidden {
-    display: none !important;
-  }
-
   .workbench-panel-wrapper {
     padding: 20px 16px !important;
   }
 }
+
 
 
 

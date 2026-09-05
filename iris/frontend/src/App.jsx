@@ -30,7 +30,7 @@ import {
 export default function App() {
   const [activeView, setActiveView] = useState('scanners'); // 'scanners', 'demo'
   const [activeModality, setActiveModality] = useState('url'); // default to URL
-  const [mobileInspectionOpen, setMobileInspectionOpen] = useState(false); // mobile drill-down state
+  const [isInspectionOpen, setIsInspectionOpen] = useState(false); // drill-down state (Desktop & Mobile)
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
@@ -43,17 +43,17 @@ export default function App() {
 
   const handleSelectModality = (modalityId) => {
     setActiveModality(modalityId);
-    setMobileInspectionOpen(true);
+    setIsInspectionOpen(true);
   };
 
   const handleBackToOptions = () => {
-    setMobileInspectionOpen(false);
+    setIsInspectionOpen(false);
   };
 
   const handleSelectPrimaryAction = (modality) => {
     setActiveModality(modality);
     setActiveView('scanners');
-    setMobileInspectionOpen(true);
+    setIsInspectionOpen(true);
     setCurrentResult(null);
     scrollToScanner();
   };
@@ -154,7 +154,7 @@ export default function App() {
   const handleRunDemoScenario = async (scenario) => {
     setErrorMsg('');
     setActiveView('scanners');
-    setMobileInspectionOpen(true);
+    setIsInspectionOpen(true);
 
     if (scenario.type === 'message') {
       setActiveModality('message');
@@ -358,7 +358,7 @@ export default function App() {
                 result={currentResult}
                 onReset={() => {
                   setCurrentResult(null);
-                  setMobileInspectionOpen(false);
+                  setIsInspectionOpen(false);
                 }}
               />
             ) : (
@@ -368,9 +368,8 @@ export default function App() {
 
                 {/* Main Threat Inspection Workbench Section */}
                 <div ref={scannerSectionRef} style={{ paddingTop: '28px', marginBottom: '40px' }}>
-                  {/* Workbench Header: Hidden on mobile when inspection panel is open */}
+                  {/* Workbench Header */}
                   <div
-                    className={`workbench-header ${mobileInspectionOpen ? 'mobile-hidden' : ''}`}
                     style={{
                       marginBottom: '24px',
                       textAlign: 'center'
@@ -384,71 +383,74 @@ export default function App() {
                     </p>
                   </div>
 
-                  {/* 5 Modality Workbench CTA Cards: Hidden on mobile when inspection panel is open */}
-                  <div className={`workbench-cards-wrapper ${mobileInspectionOpen ? 'mobile-hidden' : ''}`}>
-                    <ModalityTabs
-                      activeModality={activeModality}
-                      setActiveModality={handleSelectModality}
-                    />
-                  </div>
-
-                  {/* Active Modality Input Panel: Hidden on mobile when mobileInspectionOpen is false */}
-                  <div
-                    className={`surface-elevated workbench-panel-wrapper ${!mobileInspectionOpen ? 'mobile-hidden' : ''} animate-fade-in`}
-                    style={{ padding: '28px 32px' }}
-                  >
-                    {/* Mobile Back Button */}
-                    <div className="mobile-back-button-container">
-                      <button
-                        type="button"
-                        onClick={handleBackToOptions}
-                        className="mobile-back-button"
-                      >
-                        <ArrowLeft size={16} />
-                        <span>Back to inspection options</span>
-                      </button>
+                  {/* State 1: 5 Modality Workbench CTA Cards (Shown when no modality inspection is open) */}
+                  {!isInspectionOpen && (
+                    <div className="animate-fade-in">
+                      <ModalityTabs
+                        activeModality={activeModality}
+                        setActiveModality={handleSelectModality}
+                      />
                     </div>
+                  )}
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                      <div style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '8px',
-                        background: 'var(--bg-surface-2)',
-                        border: '1px solid var(--border-default)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'var(--accent-light)'
-                      }}>
-                        {currentModalityObj && <currentModalityObj.icon size={16} />}
+                  {/* State 2: Active Modality Input Panel + Back Button (Shown on Desktop & Mobile when inspection is open) */}
+                  {isInspectionOpen && (
+                    <div className="animate-fade-in">
+                      {/* Back Button above the inspection panel */}
+                      <div style={{ marginBottom: '16px' }}>
+                        <button
+                          type="button"
+                          onClick={handleBackToOptions}
+                          className="workbench-back-button"
+                        >
+                          <ArrowLeft size={16} />
+                          <span>Back to inspection options</span>
+                        </button>
                       </div>
-                      <div>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.01em' }}>
-                          {currentModalityObj?.name} Inspection
-                        </h3>
-                        <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                          {currentModalityObj?.desc}
-                        </p>
+
+                      <div className="surface-elevated" style={{ padding: '28px 32px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+                          <div style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '8px',
+                            background: 'var(--bg-surface-2)',
+                            border: '1px solid var(--border-default)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'var(--accent-light)'
+                          }}>
+                            {currentModalityObj && <currentModalityObj.icon size={16} />}
+                          </div>
+                          <div>
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.01em' }}>
+                              {currentModalityObj?.name} Inspection
+                            </h3>
+                            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                              {currentModalityObj?.desc}
+                            </p>
+                          </div>
+                        </div>
+
+                        {activeModality === 'url' && (
+                          <UrlScannerTab onAnalyze={handleAnalyzeURL} />
+                        )}
+                        {activeModality === 'qr' && (
+                          <QrScannerTab onAnalyze={handleAnalyzeQR} />
+                        )}
+                        {activeModality === 'message' && (
+                          <MessageScannerTab onAnalyze={handleAnalyzeMessage} />
+                        )}
+                        {activeModality === 'screenshot' && (
+                          <ScreenshotScannerTab onAnalyze={handleAnalyzeScreenshot} />
+                        )}
+                        {activeModality === 'transaction' && (
+                          <TransactionScannerTab onAnalyze={handleAnalyzeTransaction} />
+                        )}
                       </div>
                     </div>
-
-                    {activeModality === 'url' && (
-                      <UrlScannerTab onAnalyze={handleAnalyzeURL} />
-                    )}
-                    {activeModality === 'qr' && (
-                      <QrScannerTab onAnalyze={handleAnalyzeQR} />
-                    )}
-                    {activeModality === 'message' && (
-                      <MessageScannerTab onAnalyze={handleAnalyzeMessage} />
-                    )}
-                    {activeModality === 'screenshot' && (
-                      <ScreenshotScannerTab onAnalyze={handleAnalyzeScreenshot} />
-                    )}
-                    {activeModality === 'transaction' && (
-                      <TransactionScannerTab onAnalyze={handleAnalyzeTransaction} />
-                    )}
-                  </div>
+                  )}
                 </div>
 
                 {/* DEMO FOR ACET Quick Launcher */}
